@@ -4,45 +4,29 @@ ended = false;
 while 1
     pause(0.1);
      switch key 
+         case 'leftarrow'
+            mobility.turnLeft();
         case 'uparrow' 
-        brick.MoveMotor('B',50);
-        brick.MoveMotor('C',50);
+            mobility.forwards();
         case 'downarrow'
-        brick.MoveMotor('B',-50);
-        brick.MoveMotor('C',-50);
+            backwards();
         case 'rightarrow'
-        brick.StopMotor('B');
-            brick.MoveMotor('C',50);
-             brick.MoveMotor('B',-50);
-     
-         case 'a'
-        brick.StopMotor('C');
-        brick.MoveMotor('B',50);
-        brick.MoveMotor('C',-50);
+            mobility.turnRight();
+        case 'a'
+            mobility.turnLeft();
         case 'w' 
-        brick.MoveMotor('B',50);
-        brick.MoveMotor('C',50);
+            mobility.forwards();
         case 's'
-        brick.MoveMotor('B',-50);
-        brick.MoveMotor('C',-50);
+            backwards();
         case 'd'
-        brick.StopMotor('B');
-            brick.MoveMotor('C',50);
-             brick.MoveMotor('B',-50);
-     
-        case 'leftarrow'
-        brick.StopMotor('C');
-        brick.MoveMotor('B',50);
-        brick.MoveMotor('C',-50);
+            mobility.turnRight();
         case 'space'
             brick.StopAllMotors('Coast');
         case '1'
-            %brick.MoveMotorAngleRel('D',5,25,'Coast');
             brick.MoveMotor('D',10);
             pause(0.2);
             brick.StopAllMotors('Coast');
         case '2'
-            %brick.MoveMotorAngleRel('D',-5,25,'Coast');
             brick.MoveMotor('D',-15);
             pause(0.2);
             brick.StopAllMotors('Coast');
