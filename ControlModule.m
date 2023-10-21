@@ -23,17 +23,17 @@ while 1
         case 'space'
             brick.StopAllMotors('Coast');
         case '1'
+            % Raise Forklift
             brick.MoveMotor('D',10);
             pause(0.2);
             brick.StopAllMotors('Coast');
         case '2'
+            % Lower Forklift
             brick.MoveMotor('D',-15);
             pause(0.2);
             brick.StopAllMotors('Coast');
         case 'q'
             break;
-            
-            
     end
 end
 CloseKeyboard();
