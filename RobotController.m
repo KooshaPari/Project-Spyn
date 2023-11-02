@@ -5,30 +5,26 @@ classdef RobotController
     properties (Constant)
         FORWARD_SENSOR_PORT = 1;
         GYRO_SENSOR_PORT = 2;
+        COLOR_SENSOR_PORT = 3;
         MOTOR_B = 'C'; % Left front motor
         MOTOR_C = 'B'; % Right front motor
     end
 methods
         function obj = RobotController()
             % Connect to Brick.
-            brick = ConnectBrick('EPIKS');
+            obj.brick = ConnectBrick('EPIKS');
             % Play tone with frequency 800Hz and duration of 500ms.
-            brick.playTone(100, 800, 500);
-            obj.isMobilityActive = true;
-            obj.exitFlag = false;
+            %brick.playTone(100, 800, 500);
             disp('RobotController initialized.');
         end
         
         function start(obj)
-            obj.brick.GyroCalibrate(GYRO_SENSOR_PORT);
-            while ~obj.exitFlag
-                if obj.isMobilityActive
-                    obj.PID_lane_centering(obj.brick);
-                else
-                    pause(0.1);  % Small delay to prevent busy-waiting
-                end
-            end
+            obj.brick.GyroCalibrate(obj.GYRO_SENSOR_PORT);
+            obj.brick.SetColorMode(obj.COLOR_SENSOR_PORT, 1); 
+            ControlModule(obj);
+            autonomy(obj);
+        end
         end
 end
-end
+
 

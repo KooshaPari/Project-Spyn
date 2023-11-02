@@ -1,40 +1,42 @@
+function ControlModule(obj)
 global key;
 InitKeyboard();
 ended = false;
+
 while 1
     pause(0.1);
      switch key 
          case 'leftarrow'
-            mobility.turnLeft();
+            mobility.turnLeft(obj);
         case 'uparrow' 
-            mobility.forwards();
+            mobility.forwards(obj);
         case 'downarrow'
-            backwards();
+            mobility.backwards(obj);
         case 'rightarrow'
-            mobility.turnRight();
+            mobility.turnRight(obj);
         case 'a'
-            mobility.turnLeft();
+            mobility.turnLeft(obj);
         case 'w' 
-            mobility.forwards();
+            mobility.forwards(obj);
         case 's'
-            backwards();
+            mobility.backwards(obj);
         case 'd'
-            mobility.turnRight();
+            mobility.turnRight(obj);
         case 'space'
-            brick.StopAllMotors('Coast');
+            obj.brick.StopAllMotors('Coast');
         case '1'
-            brick.MoveMotor('D',10);
+            % Raise Forklift
+            obj.brick.MoveMotor('D',10);
             pause(0.2);
-            brick.StopAllMotors('Coast');
+            obj.brick.StopAllMotors('Coast');
         case '2'
-            brick.MoveMotor('D',-15);
+            % Lower Forklift
+            obj.brick.MoveMotor('D',-15);
             pause(0.2);
-            brick.StopAllMotors('Coast');
+            obj.brick.StopAllMotors('Coast');
         case 'q'
             break;
-            
-            
     end
 end
 CloseKeyboard();
-
+end
