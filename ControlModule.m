@@ -1,6 +1,5 @@
 function ControlModule(obj)
 global key;
-global future;
 InitKeyboard();
 
 % Create a parallel pool with one worker
@@ -56,13 +55,10 @@ while 1
              robot = RobotController();
              obj = robot;
         case 'q'
+            obj.brick.StopAllMotors('Coast');
                 break;
 
     end
 end
-% Ensure that the future completes before exiting
-wait(future);
-% Close the parallel pool
-delete(pool);
 CloseKeyboard();
 end

@@ -8,21 +8,32 @@ function autonomy(obj)
         pause(0.05);
         color = brick.ColorCode(3);
         distance1 = brick.UltrasonicDist(1);
-        disp("Current Distance: " +distance1);
+        pause(0.1);
+        distance2 = brick.UltrasonicDist(1);
+        pause(0.1);
+        distance3 = brick.UltrasonicDist(1);
+        dist = (distance1+distance2+distance3)/3
+        disp("Current Distance: " +dist);
 
         % Object Avoidance Process
-        if (distance1 < 30)
+        if (dist < 30)
             disp('Obstacle Detected, Beginning Turn Sequence...');
-            if (distance1 < 10)
+            if (dist < 10)
                 disp("Risk of Collision on Turn, Backing Up...");
                 mobility.backwards(obj);
-                disp("Backing Completed.");
                 pause(0.5);
+                brick.StopAllMotors();
+                disp("Backing Completed.");
             end
-            mobility.scan(obj);
+            mobility.turn(obj);
             disp("Turn Sequence Completed, Moving Forward.");
             brick.StopAllMotors();
             distance1 = brick.UltrasonicDist(1);
+            pause(0.1);
+             distance2 = brick.UltrasonicDist(1);
+             pause(0.1);
+                distance3 = brick.UltrasonicDist(1);
+                dist = (distance1+distance2+distance3)/3
         end
 
         % Zone Detection Process    
@@ -40,13 +51,13 @@ function autonomy(obj)
                 brick.playTone(100, 800, 500);
                 pause(1.5);
                 brick.playTone(100, 800, 500);
-                ControlModule(obj);
+                run(ControlModule(obj));
                 disp("Passenger Picked Up.");
             end
             if color == 4
                 disp("Yellow Zone Detected, Switching to Remote Control...");
                 brick.StopAllMotors();
-                ControlModule(obj);
+                run(ControlModule(obj));
             end
             if color == 3
                 disp("Green Zone Detected, Switching to Remote Control...");
@@ -56,7 +67,7 @@ function autonomy(obj)
                 pause(1.5);
                 brick.playTone(100, 800, 500);
                 brick.StopAllMotors();
-                ControlModule(obj);
+                run(ControlModule(obj));
                 disp("Passenger Dropped Off");
             end
 

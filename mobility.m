@@ -100,38 +100,40 @@ classdef mobility
             mobility.forwards(obj);
             %mobility.PID_lanecenter(obj);
         end
-        
         function PID_turn(obj, angle)
             disp("Turning " + angle + "degrees...");
             % PID Controller Parameters for the turn
             Kp_turn = 0.5;   % Proportional gain for turn
             Ki_turn = 0.05;  % Integral gain for turn
             Kd_turn = 0.1;   % Derivative gain for turn
-            turn_tolerance = 5; % Tolerance for considering the turn complete
+            turn_tolerance = 10; % Tolerance for considering the turn complete
 
             % Initialize PID variables for the turn
             integral_turn = 0;
             previous_error_turn = 0;
 
             % Calculate the target angle based on the current gyro reading
-            current_angle = obj.brick.GyroAngle(obj.GYRO_SENSOR_PORT);
-            target_angle = current_angle + angle;
+            current_angle = mod(obj.brick.GyroAngle(obj.GYRO_SENSOR_PORT),360);
+            target_angle = current_angle+angle;
+            original_angle = current_angle;
+            disp(current_angle + " " + target_angle);
 
             % Define the maximum motor speed for turning
             max_turn_speed = 50;
-
             while true
                 % Calculate the error between the target angle and the current angle
-                current_angle = obj.brick.GyroAngle(obj.GYRO_SENSOR_PORT);
+                current_angle = mod(obj.brick.GyroAngle(obj.GYRO_SENSOR_PORT),360);
                 error_turn = target_angle - current_angle;
-
+                %if mod(current_angle, 2) == 0
+                    %disp(current_angle);
+                %end
                 % Check if the turn is within the specified tolerance
                 if abs(error_turn) < turn_tolerance
                     obj.brick.StopAllMotors(obj.MOTOR_B);
                     obj.brick.StopAllMotors(obj.MOTOR_C);
                     break;  % Turn is complete
                 end
-
+                
                 % Apply PID control to adjust the motor speeds for turning
                 P_turn = Kp_turn * error_turn;
                 integral_turn = integral_turn + error_turn;
@@ -141,7 +143,7 @@ classdef mobility
 
                 % Calculate the motor speed adjustment
                 motor_speed_turn = P_turn + I_turn + D_turn;
-
+            
                 % Limit the motor speed to avoid excessive speed
                 if motor_speed_turn > max_turn_speed
                     motor_speed_turn = max_turn_speed;
@@ -155,11 +157,11 @@ classdef mobility
 
                 % Update previous error for the next iteration
                 previous_error_turn = error_turn;
-
                 % Add a small delay to control the PID loop frequency
-                pause(0.01);
+                pause(0.05);
             end
-
+            change = current_angle-original_angle;
+            disp(original_angle + " " +current_angle+" "+change);
             % Stop all motors after completing the turn
             obj.brick.StopAllMotors(obj.MOTOR_B);
             obj.brick.StopAllMotors(obj.MOTOR_C);
@@ -232,6 +234,44 @@ classdef mobility
             obj.brick.StopAllMotors(obj.MOTOR_C);
 end
 
+function turn(obj)
+            disp("Trying Left");
+            obj.brick.MoveMotor('B',50);
+            obj.brick.MoveMotor('C',-50);
+            pause(1);
+            obj.brick.StopAllMotors();
+            disp(obj.brick.UltrasonicDist(1));
+            if obj.brick.UltrasonicDist(1) < 30
+                disp("Trying Right");
+                obj.brick.MoveMotor('B',-50);
+                obj.brick.MoveMotor('C',50);
+                pause(2.5);
+                obj.brick.StopAllMotors();
+                disp(obj.brick.UltrasonicDist(1));
+                if obj.brick.UltrasonicDist(1) < 30
+                disp("Trying Rear");
+                obj.brick.MoveMotor('B',-50);
+                obj.brick.MoveMotor('C',50);
+                pause(1);
+                obj.brick.StopAllMotors();
+                disp(obj.brick.UltrasonicDist(1));
+                if obj.brick.UltrasonicDist(1) < 30
+                    turn(obj);
+                else
+                    mobility.forwards(obj);
+                    return;
+                end
+                else
+                    mobility.forwards(obj);
+                    return;
+                end
+                else
+                    mobility.forwards(obj);
+                    return;
+            end
+            
+
+        end
     end
 end
 
