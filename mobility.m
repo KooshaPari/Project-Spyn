@@ -245,28 +245,28 @@ function turn(obj)
                 disp("Trying Right");
                 obj.brick.MoveMotor('B',-50);
                 obj.brick.MoveMotor('C',50);
-                pause(2.5);
+                pause(2);
                 obj.brick.StopAllMotors();
                 disp(obj.brick.UltrasonicDist(1));
                 if obj.brick.UltrasonicDist(1) < 30
                 disp("Trying Rear");
                 obj.brick.MoveMotor('B',-50);
                 obj.brick.MoveMotor('C',50);
-                pause(1);
+                pause(0.5);
                 obj.brick.StopAllMotors();
                 disp(obj.brick.UltrasonicDist(1));
                 if obj.brick.UltrasonicDist(1) < 30
                     turn(obj);
                 else
-                    mobility.forwards(obj);
+                   % mobility.forwards(obj);
                     return;
                 end
                 else
-                    mobility.forwards(obj);
+                   % mobility.forwards(obj);
                     return;
                 end
                 else
-                    mobility.forwards(obj);
+                   % mobility.forwards(obj);
                     return;
             end
             

@@ -26,6 +26,7 @@ function autonomy(obj)
                 disp("Backing Completed.");
             end
             mobility.turn(obj);
+            %mobility.forwards(obj);
             disp("Turn Sequence Completed, Moving Forward.");
             brick.StopAllMotors();
             distance1 = brick.UltrasonicDist(1);
