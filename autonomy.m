@@ -46,19 +46,19 @@ function autonomy(obj)
             mobility.forwards(obj);
             pause(1);
         elseif color == 2 || color == 3 || color == 4
-            if color == 2
+            if color == 4
                 disp("Blue Zone Detected, Switching to Remote Control...");
                 brick.StopAllMotors();
                 brick.playTone(100, 800, 500);
                 pause(1.5);
                 brick.playTone(100, 800, 500);
-                run(ControlModule(obj));
+                ControlModule(obj);
                 disp("Passenger Picked Up.");
             end
-            if color == 4
+            if color == 2
                 disp("Yellow Zone Detected, Switching to Remote Control...");
                 brick.StopAllMotors();
-                run(ControlModule(obj));
+                ControlModule(obj);
             end
             if color == 3
                 disp("Green Zone Detected, Switching to Remote Control...");
@@ -68,7 +68,7 @@ function autonomy(obj)
                 pause(1.5);
                 brick.playTone(100, 800, 500);
                 brick.StopAllMotors();
-                run(ControlModule(obj));
+                ControlModule(obj);
                 disp("Passenger Dropped Off");
             end
 

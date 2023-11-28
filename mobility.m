@@ -238,25 +238,42 @@ function turn(obj)
             disp("Trying Left");
             obj.brick.MoveMotor('B',50);
             obj.brick.MoveMotor('C',-50);
-            pause(1);
+            pause(2);
             obj.brick.StopAllMotors();
             disp(obj.brick.UltrasonicDist(1));
-            if obj.brick.UltrasonicDist(1) < 30
+            dist = obj.brick.UltrasonicDist(1);
+            if (dist < 10)
+                disp("Risk of Collision on Turn, Backing Up...");
+                mobility.backwards(obj);
+                pause(0.5);
+                obj.brick.StopAllMotors();
+                disp("Backing Completed.");
+            end
+            if dist < 30
                 disp("Trying Right");
+                obj.brick.MoveMotor('B',-70);
+                obj.brick.MoveMotor('C',70);
+                pause(4.25);
+                obj.brick.StopAllMotors();
+                disp(obj.brick.UltrasonicDist(1));
+                 dist = obj.brick.UltrasonicDist(1);
+                if (dist < 10)
+                disp("Risk of Collision on Turn, Backing Up...");
+                mobility.backwards(obj);
+                pause(0.5);
+                obj.brick.StopAllMotors();
+                disp("Backing Completed.");
+                end
+                if dist < 30
+                disp("Trying Rear");
                 obj.brick.MoveMotor('B',-50);
                 obj.brick.MoveMotor('C',50);
                 pause(2);
                 obj.brick.StopAllMotors();
                 disp(obj.brick.UltrasonicDist(1));
+                
                 if obj.brick.UltrasonicDist(1) < 30
-                disp("Trying Rear");
-                obj.brick.MoveMotor('B',-50);
-                obj.brick.MoveMotor('C',50);
-                pause(0.5);
-                obj.brick.StopAllMotors();
-                disp(obj.brick.UltrasonicDist(1));
-                if obj.brick.UltrasonicDist(1) < 30
-                    turn(obj);
+                    mobility.turn(obj);
                 else
                    % mobility.forwards(obj);
                     return;
