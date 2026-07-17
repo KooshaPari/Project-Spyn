@@ -1,0 +1,93 @@
+Last login: Thu Feb 15 14:59:21 on console
+❯ mkdir testC
+❯ cd testC
+❯ make && ./test1.sh
+^C
+❯ make
+make: *** No targets specified and no makefile found.  Stop.
+❯ ls
+Makefile.txt libmgmt.c    libmgmt.h    main.bin     main.c       test1.sh
+❯ make
+make: *** No targets specified and no makefile found.  Stop.
+❯ ls
+Makefile.txt libmgmt.c    libmgmt.h    main.bin     main.c       test1.sh
+❯ sudo make
+Password:
+sudo: a password is required
+❯ make main.c
+make: Nothing to be done for `main.c'.
+❯ make main.bin
+make: Nothing to be done for `main.bin'.
+❯ make
+make: *** No targets specified and no makefile found.  Stop.
+❯ ls
+Makefile.txt libmgmt.c    libmgmt.h    main.bin     main.c       test1.sh
+❯ sudo mv Makefile.txt makefile
+Password:
+❯ make
+gcc -g -Wall -Werror -fprofile-arcs -ftest-coverage  -c main.c
+gcc -g -Wall -Werror -fprofile-arcs -ftest-coverage  -c libmgmt.c
+gcc -g -Wall -Werror -fprofile-arcs -ftest-coverage  main.o libmgmt.o -o main.bin
+❯ ./test1.sh
+zsh: permission denied: ./test1.sh
+❯ sudo ./test1.sh
+sudo: ./test1.sh: command not found
+❯ ls
+libmgmt.c    libmgmt.h    main.bin     main.gcno    makefile
+libmgmt.gcno libmgmt.o    main.c       main.o       test1.sh
+❯ sudo bash ./test1.sh
+CFLAGS=
+rm -f *.o main.bin *.gc*
+gcc -g -Wall -Werror -fprofile-arcs -ftest-coverage  -c main.c
+gcc -g -Wall -Werror -fprofile-arcs -ftest-coverage  -c libmgmt.c
+gcc -g -Wall -Werror -fprofile-arcs -ftest-coverage  main.o libmgmt.o -o main.bin
+./test1.sh: line 25: ./modelGood.bin: No such file or directory
+Missing 'Book added successfully!' in the output
+>>>>>>> Program's Output <<<<<<
+Test Failed
+❯ nvim test1.sh
+❯ sudo bash ./test1.sh
+CFLAGS=
+rm -f *.o main.bin *.gc*
+gcc -g -Wall -Werror -fprofile-arcs -ftest-coverage  -c main.c
+gcc -g -Wall -Werror -fprofile-arcs -ftest-coverage  -c libmgmt.c
+gcc -g -Wall -Werror -fprofile-arcs -ftest-coverage  main.o libmgmt.o -o main.bin
+^C
+❯ nvim test1.sh
+
+#! /usr/bin/env bash
+if [[ -n "$1" ]]; then
+    targetBinary=$1
+else    
+    targetBinary="main.bin"
+fi 
+echo "CFLAGS=$CFLAGS"
+# Black box tester the my_functions program 
+########################################################
+## DO NOT REMOVE $CFLAGS FROM COMPILE STATEMENT
+#if [[ $targetBinary != *"model"* ]]; then
+#    gcc -g -Wall -Werror main.c $CFLAGS -o "${targetBinary}"
+#fi 
+make clean 
+make 
+############################################################
+
+# test case sending input into program and saving output to /tmp/OUTPUT
+
+printf "1
+test1
+test1a
+1
+5" > /tmp/INPUT 
+
+./${targetBinary} < /tmp/INPUT > /tmp/OUTPUT
+echo "------OUTPUT BELOW------"
+cat /tmp/OUTPUT
+echo "------OUTPUT ABOVE------"
+EXPECTED_OUTPUT="Book added successfully!"
+
+if grep -q -i -E "$EXPECTED_OUTPUT" /tmp/OUTPUT; then
+    echo "Found '$EXPECTED_OUTPUT'"    
+else
+test1.sh [+]                                                                                   28,16          Top
+-- INSERT --

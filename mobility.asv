@@ -233,58 +233,24 @@ classdef mobility
             obj.brick.StopAllMotors(obj.MOTOR_B);
             obj.brick.StopAllMotors(obj.MOTOR_C);
 end
-
-function turn(obj)
+        function turn(obj)
             disp("Trying Left");
-            obj.brick.MoveMotor('B',50);
-            obj.brick.MoveMotor('C',-50);
-            pause(2);
-            obj.brick.StopAllMotors();
-            disp(obj.brick.UltrasonicDist(1));
-            dist = obj.brick.UltrasonicDist(1);
-            if (dist < 10)
-                disp("Risk of Collision on Turn, Backing Up...");
-                mobility.backwards(obj);
-                pause(0.5);
-                obj.brick.StopAllMotors();
-                disp("Backing Completed.");
-            end
-            if dist < 30
+            obj.brick.MoveMotor('B',-50);
+            obj.brick.MoveMotor('C',50);
+            pause(5);
+            obj.brick.stopAllMotors();
+            if obj.brick.UltrasonicDist(2) < 30
                 disp("Trying Right");
-                obj.brick.MoveMotor('B',-70);
-                obj.brick.MoveMotor('C',70);
-                pause(4.25);
-                obj.brick.StopAllMotors();
-                disp(obj.brick.UltrasonicDist(1));
-                 dist = obj.brick.UltrasonicDist(1);
-                if (dist < 10)
-                disp("Risk of Collision on Turn, Backing Up...");
-                mobility.backwards(obj);
-                pause(0.5);
-                obj.brick.StopAllMotors();
-                disp("Backing Completed.");
+                obj.brick.MoveMotor('B',50);
+                obj.brick.MoveMotor('C',-50);
+                pause(10);
+                obj.brick.stopAllMotors();
+                if obj.brick.UltrasonicDist(2) < 30
+                obj.brick.MoveMotor('B',50);
+                obj.brick.MoveMotor('C',-50);
+                pause(5);
+                obj.brick.stopAllMotors();
                 end
-                if dist < 30
-                disp("Trying Rear");
-                obj.brick.MoveMotor('B',-50);
-                obj.brick.MoveMotor('C',50);
-                pause(2);
-                obj.brick.StopAllMotors();
-                disp(obj.brick.UltrasonicDist(1));
-                if obj.brick.UltrasonicDist(1) < 30
-                    disp("Retrying");
-                    mobility.turn(obj);
-                else
-                   % mobility.forwards(obj);
-                    return;
-                end
-                else
-                   % mobility.forwards(obj);
-                    return;
-                end
-                else
-                   % mobility.forwards(obj);
-                    return;
             end
             
 
